@@ -11,19 +11,26 @@
 
         <div class="container-container">
             <div class="question-list">
-                <h4>Question</h4>
+                <h4 style="padding: 0 20px">Question</h4>
 
                 <div class="questions">
-                    <div class="question" v-for="question in questionList.questions">
-                        {{ question.name }}
+                    <div class="question" v-for="question in questionList.questions" style="display: flex">
+                        <div>{{ question.name }}</div>
+                        <div class="score" style="width: 50px; height: 20px; background-color: #1a202c">
+
+                        </div>
+                        <div class="comments" style="width: 50px; height: 20px; background-color: #1a202c">
+
+                        </div>
                     </div>
+
                 </div>
 
             </div>
 
 
-            <div style="width:20%">Score</div>
-            <div style="width:20%">Comments</div>
+            <!--<div style="width:20%">Score</div>
+            <div style="width:20%">Comments</div>-->
 
         </div>
 
@@ -109,7 +116,7 @@ export default {
         display: flex;
         height: 15%;
         gap: 10px;
-        padding: 30px;
+        padding: 20px 20px 0 20px;
 
         > img {
             height: 50px;
@@ -138,26 +145,30 @@ export default {
     .container-container {
         display: flex;
         flex-direction: row;
-        align-items: flex-end;
+        align-items: flex-start;
+        justify-content: flex-start;
         height: 100%;
 
         .question-list {
-            width: 60%;
+            display: flex;
+            flex-direction: column;
+            width: 100%;
             min-width: fit-content;
 
             .questions {
                 display: flex;
-                gap: 10px;
                 flex-direction: column;
                 flex-wrap: wrap;
-                height: 25%;
 
                 .question {
                     height: 25%;
-                    width: fit-content;
-                    background-color: lightcoral;
+                    min-width: fit-content;
                     padding: 20px;
                     border-top: #F7F7F7 solid 2px;
+                    display: flex;
+                    flex-direction: row;
+                    flex-wrap: nowrap;
+
                 }
             }
 

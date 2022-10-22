@@ -8,13 +8,13 @@
 </head>
 
 <body>
-<div class="container-container">
+<div class="main-container">
     <div class="chart-container" title="such visuals">
         chart
     </div>
 
     <div class="cardlists" id="app">
-        <card-list title="Strong" subtitle="Your three best-performing questions"></card-list>
+        <card-list title="Strengths" subtitle="Your three best-performing questions"></card-list>
         <card-list title="Areas for improvement" subtitle="Your three worst-performing questions"></card-list>
     </div>
 </div>
@@ -28,7 +28,7 @@
         background-color: #F7F7F7;
     }
 
-    .container-container {
+    .main-container {
         display: flex;
         flex-direction: column;
         gap: 30px;
@@ -38,7 +38,6 @@
     }
 
     .chart-container {
-        width: calc(100vw; -
         height: calc(40vh - 90px);
         background-color: white;
         padding: 30px;
