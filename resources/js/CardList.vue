@@ -9,31 +9,33 @@
         </div>
 
         <div class="question-list" style="display: flex; flex-direction: row; align-items: flex-end; height: 10%">
-            <!--v-for-->
             <div style="width:60%; min-width: fit-content">Question</div>
             <div style="width:20%">Score</div>
             <div style="width:20%">Comments</div>
 
         </div>
-    </div>
-    <div style="height: fit-content; width:100%; gap: 10px; background-color: #2d3748; display: flex;">
-        <div style="display: flex; gap: 10px; flex-direction: column; flex-wrap: wrap">
-            <div v-for="question in questionList" style="height: fit-content; width: fit-content; background-color:lightcoral">
-                <div>
-                    {{ question }}
-                </div>
-            </div>
-        </div>
 
-        <div style="display: flex; gap: 10px; flex-direction: column; flex-wrap: wrap">
-            <div v-for="reply in replyList" :key="reply.id"
-                 style="height: fit-content; width: fit-content; background-color: lightblue">
-                <div>
-                    {{ reply }}
+        <div style="height: fit-content; width:100%; gap: 10px; background-color: #2d3748; display: flex;">
+            <div style="display: flex; gap: 10px; flex-direction: column; flex-wrap: wrap">
+                <div v-for="question in questionList.questions"
+                     style="height: fit-content; width: fit-content; background-color:lightcoral">
+                    {{ question.name }}
                 </div>
             </div>
+
+            <!--<div style="display: flex; gap: 10px; flex-direction: column; flex-wrap: wrap">
+                <div v-for="reply in replyList" :key="reply.id"
+                     style="height: fit-content; width: fit-content; background-color: lightblue">
+                    <div v-for="(childItem, key) in reply">
+                        <div>
+                            {{ childItem }}
+                        </div>
+                    </div>
+                </div>
+            </div>-->
         </div>
     </div>
+
 </template>
 
 <script>
@@ -47,9 +49,9 @@ export default {
             replyList: [],
         }
     },
-    props: [
+    /*props: [
         'header'
-    ],
+    ],*/
     methods: {
         getQuestions() {
             var that = this;
