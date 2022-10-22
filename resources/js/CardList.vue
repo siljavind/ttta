@@ -112,10 +112,12 @@ export default {
     },
     computed: {
         scoreAverage() {
-            var that = this;
-            var number = 0;
-            const scoreSum = this.replyList[1].reply_questions[0].value;
+            var scoreSum;
 
+            for (let i = 0; i < this.replyList.length; i++) {
+                scoreSum += this.replyList[i].reply_questions[i].value;
+                console.log(i);
+            }
             console.log(scoreSum);
             return scoreSum;
         }
