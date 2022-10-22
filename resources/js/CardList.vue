@@ -18,8 +18,8 @@
                         <div>{{ question.name }}</div>
                     </div>
                     <div v-for="items in replyList" style="margin-bottom: 50px">
-                        <div v-for="item in items.custom_variables">
-                            {{item.custom_variable_id}}
+                        <div v-for="item in items.reply_questions">
+                            {{scoreAverage}}
                         </div>
                     </div>
 
@@ -88,7 +88,6 @@ export default {
                     //console.log(JSON.parse(JSON.stringify(this.questionList.data.questions)));
                     //console.log(this.questionList);
                 }).catch(error => {
-                //this.getQuestions();
             });
         },
 
@@ -104,24 +103,26 @@ export default {
                     this.replyList = response.data.data;
 
                     //let json = JSON.parse(JSON.stringify(response.data.data));
-                    let json = response.data.data;
-                    console.log(json);
+                    //let json = response.data.data;
+                    //console.log(json);
                 }).catch(error => {
             });
 
-
         },
-
+    },
+    computed: {
         scoreAverage() {
             var that = this;
+            var number = 0;
+            const scoreSum = this.replyList[1].reply_questions[0].value;
 
-        },
-
+            console.log(scoreSum);
+            return scoreSum;
+        }
     },
     mounted() {
         this.getQuestions();
         this.getReplies();
-        this.scoreAverage();
     }
 }
 </script>
