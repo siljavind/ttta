@@ -19,7 +19,7 @@
                     </div>
                     <div v-for="items in replyList" style="margin-bottom: 50px">
                         <div v-for="item in items.reply_questions">
-                            {{scoreAverage}}
+                            <!--{{scoreAverage}}--> {{item}}
                         </div>
                     </div>
 
@@ -110,7 +110,7 @@ export default {
 
         },
     },
-    computed: {
+    /*computed: {
         scoreAverage() {
             var scoreSum;
 
@@ -121,7 +121,7 @@ export default {
             console.log(scoreSum);
             return scoreSum;
         }
-    },
+    },*/
     mounted() {
         this.getQuestions();
         this.getReplies();
