@@ -17,14 +17,11 @@
                     <div class="question" v-for="question in questionList.questions" :key="question.id">
                         <div>{{ question.name }}</div>
                     </div>
-                    <div v-for="item in replyList">
-                        <div v-for="subItem in item">
-                            <div v-for="subSubItem in subItem">
-                                {{subSubItem}}
-                            </div>
+                    <div v-for="items in replyList" style="margin-bottom: 50px">
+                        <div v-for="item in items.custom_variables">
+                            {{item.custom_variable_id}}
                         </div>
                     </div>
-
 
                     <div class="score" style="width: 50px; height: 20px; background-color: #1a202c">
 
@@ -64,7 +61,11 @@ import {isProxy, toRaw} from 'vue';
 
 export default {
     name: "card-list",
-    props: ['title', 'subtitle'],
+    props: [
+        'title',
+        'subtitle',
+
+    ],
     data: function () {
         return {
             questionList: {},
@@ -83,7 +84,7 @@ export default {
             instance.get("/")
                 .then(response => {
                     this.questionList = JSON.parse(JSON.stringify(response.data.data));
-                    console.log(JSON.parse(JSON.stringify(response.data.data)));
+                    //console.log(JSON.parse(JSON.stringify(response.data.data)));
                     //console.log(JSON.parse(JSON.stringify(this.questionList.data.questions)));
                     //console.log(this.questionList);
                 }).catch(error => {
@@ -100,8 +101,11 @@ export default {
             instance.defaults.headers.common["Authorization"] = import.meta.env.VITE_TALENTHUB_TOKEN; //IS EXPOSED TO USER
             instance.get("/replies/bulk", {})
                 .then(response => {
-                    this.replyList = JSON.parse(JSON.stringify(response.data.data));
-                    console.log(JSON.parse(JSON.stringify(response.data.data)));
+                    this.replyList = response.data.data;
+
+                    //let json = JSON.parse(JSON.stringify(response.data.data));
+                    let json = response.data.data;
+                    console.log(json);
                 }).catch(error => {
             });
 
