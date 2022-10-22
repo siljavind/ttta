@@ -9,19 +9,25 @@
             </div>
         </div>
 
-        <div class="container-container">
-            <div class="question-list">
+        <div class="feedback-container">
+            <div class="feedback-list">
                 <h4 style="padding: 0 20px">Question</h4>
 
-                <div class="questions">
-                    <div class="question" v-for="question in questionList.questions" style="display: flex">
+                <div class="feedback">
+                    <div class="question" v-for="question in questionList.questions" :key="question.id">
                         <div>{{ question.name }}</div>
-                        <div class="score" style="width: 50px; height: 20px; background-color: #1a202c">
-
+                    </div>
+                    <div v-for="item in replyList">
+                        <div v-for="subItem in item">
+                            <div v-for="subSubItem in subItem">
+                                {{subSubItem}}
+                            </div>
                         </div>
-                        <div class="comments" style="width: 50px; height: 20px; background-color: #1a202c">
+                    </div>
 
-                        </div>
+
+                    <div class="score" style="width: 50px; height: 20px; background-color: #1a202c">
+
                     </div>
 
                 </div>
@@ -53,15 +59,17 @@
 </template>
 
 <script>
-import axios from 'axios'
+import axios from 'axios';
+import {isProxy, toRaw} from 'vue';
 
 export default {
     name: "card-list",
     props: ['title', 'subtitle'],
     data: function () {
         return {
-            questionList: [],
+            questionList: {},
             replyList: [],
+            averageScore: [],
         }
     },
     methods: {
@@ -69,12 +77,17 @@ export default {
             var that = this;
             const instance = axios.create();
 
-            instance.defaults.baseURL = "https://business.stagingtalenthub.com/api/measurements/ab8b76b28aeb494992c47466fea7e49e";
+            instance.defaults.baseURL = "https://business.stagingtalenthub.com/api/measurements/ab8b76b28aeb494992c47466fea7e49e"
             instance.defaults.headers.common["Authorization"] = import.meta.env.VITE_TALENTHUB_TOKEN; //IS EXPOSED TO USER
-            instance.get("/", {})
-                .then(function (response) {
-                    that.questionList = response.data.data;
+            instance.defaults.responseType = 'json';
+            instance.get("/")
+                .then(response => {
+                    this.questionList = JSON.parse(JSON.stringify(response.data.data));
+                    console.log(JSON.parse(JSON.stringify(response.data.data)));
+                    //console.log(JSON.parse(JSON.stringify(this.questionList.data.questions)));
+                    //console.log(this.questionList);
                 }).catch(error => {
+                //this.getQuestions();
             });
         },
 
@@ -86,15 +99,25 @@ export default {
             instance.defaults.baseURL = "https://business.stagingtalenthub.com/api/measurements/ab8b76b28aeb494992c47466fea7e49e";
             instance.defaults.headers.common["Authorization"] = import.meta.env.VITE_TALENTHUB_TOKEN; //IS EXPOSED TO USER
             instance.get("/replies/bulk", {})
-                .then(function (response) {
-                    that.replyList = response.data;
+                .then(response => {
+                    this.replyList = JSON.parse(JSON.stringify(response.data.data));
+                    console.log(JSON.parse(JSON.stringify(response.data.data)));
                 }).catch(error => {
             });
+
+
         },
+
+        scoreAverage() {
+            var that = this;
+
+        },
+
     },
     mounted() {
         this.getQuestions();
         this.getReplies();
+        this.scoreAverage();
     }
 }
 </script>
@@ -142,23 +165,24 @@ export default {
         }
     }
 
-    .container-container {
+    .feedback-container {
         display: flex;
         flex-direction: row;
         align-items: flex-start;
         justify-content: flex-start;
         height: 100%;
 
-        .question-list {
+        .feedback-list {
             display: flex;
             flex-direction: column;
             width: 100%;
             min-width: fit-content;
 
-            .questions {
+            .feedback {
                 display: flex;
                 flex-direction: column;
                 flex-wrap: wrap;
+                width: 55%;
 
                 .question {
                     height: 25%;
@@ -168,6 +192,7 @@ export default {
                     display: flex;
                     flex-direction: row;
                     flex-wrap: nowrap;
+                    justify-content: space-between;
 
                 }
             }

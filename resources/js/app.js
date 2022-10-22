@@ -1,6 +1,6 @@
 // app.js
 import('./bootstrap');
-import {createApp} from 'vue/dist/vue.esm-bundler'
+import {createApp} from 'vue/dist/vue.esm-bundler';
 //import Vue from 'vue';
 
 //window.Vue = require('vue');
