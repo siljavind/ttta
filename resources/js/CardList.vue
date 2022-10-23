@@ -14,14 +14,19 @@
                 <h4 style="padding: 0 20px">Question</h4>
 
                 <div class="feedback">
+                    <!--{{ averageComputed }}-->
                     <div class="question" v-for="question in questionList.questions" :key="question.id">
+
                         <div>{{ question.name }}</div>
-                    </div>
-                    <div v-for="items in replyList" style="margin-bottom: 50px">
-                        <div v-for="item in items.reply_questions">
-                            <!--{{scoreAverage}}--> {{item}}
+
+
+                        <div class="averageList" v-for="item in averageComputed">
+                            <div v-if="item.question_id = question.id">
+                                {{ item.value }}
+                            </div>
                         </div>
                     </div>
+
 
                     <div class="score" style="width: 50px; height: 20px; background-color: #1a202c">
 
@@ -37,9 +42,7 @@
 
         </div>
 
-        <!--<div style="height: fit-content; width:100%; gap: 10px; background-color: #2d3748; display: flex;">
-
-
+        <!--
             <div style="display: flex; gap: 10px; flex-direction: column; flex-wrap: wrap">
                 <div v-for="reply in replyList" :key="reply.id"
                      style="height: fit-content; width: fit-content; background-color: lightblue">
@@ -57,7 +60,6 @@
 
 <script>
 import axios from 'axios';
-import {isProxy, toRaw} from 'vue';
 
 export default {
     name: "card-list",
@@ -70,62 +72,155 @@ export default {
         return {
             questionList: {},
             replyList: [],
-            averageScore: [],
+            //averageList: [],
         }
     },
     methods: {
-        getQuestions() {
-            var that = this;
+        getData() {
             const instance = axios.create();
 
             instance.defaults.baseURL = "https://business.stagingtalenthub.com/api/measurements/ab8b76b28aeb494992c47466fea7e49e"
             instance.defaults.headers.common["Authorization"] = import.meta.env.VITE_TALENTHUB_TOKEN; //IS EXPOSED TO USER
-            instance.defaults.responseType = 'json';
+            //instance.defaults.responseType = 'json';
+
             instance.get("/")
                 .then(response => {
                     this.questionList = JSON.parse(JSON.stringify(response.data.data));
-                    //console.log(JSON.parse(JSON.stringify(response.data.data)));
-                    //console.log(JSON.parse(JSON.stringify(this.questionList.data.questions)));
                     //console.log(this.questionList);
                 }).catch(error => {
             });
+
+            /*instance.get("/replies/bulk", {})
+                .then(response => {
+                    this.replyList = response.data.data;
+                }).catch(error => {
+            })*/
+
         },
 
         getReplies() {
-
-            var that = this;
             const instance = axios.create();
 
             instance.defaults.baseURL = "https://business.stagingtalenthub.com/api/measurements/ab8b76b28aeb494992c47466fea7e49e";
             instance.defaults.headers.common["Authorization"] = import.meta.env.VITE_TALENTHUB_TOKEN; //IS EXPOSED TO USER
+
             instance.get("/replies/bulk", {})
                 .then(response => {
                     this.replyList = response.data.data;
-
-                    //let json = JSON.parse(JSON.stringify(response.data.data));
-                    //let json = response.data.data;
-                    //console.log(json);
+                    //console.log(this.replyList);
                 }).catch(error => {
+                console.log("reply failed");
             });
 
-        },
-    },
-    /*computed: {
-        scoreAverage() {
-            var scoreSum;
 
+        },
+
+        averageMethod() {
+            const a = [];
+            const avg = [];
+            const tempArr = [];
+            console.log("got called");
+            console.log(this.replyList);
+            //reply_list data in array (question_id and value)
             for (let i = 0; i < this.replyList.length; i++) {
-                scoreSum += this.replyList[i].reply_questions[i].value;
-                console.log(i);
+                for (let x = 0; x < 4; x++) {
+                    a.push(this.replyList[i].reply_questions[x]);
+                    console.log("replies exist");
+                }
             }
-            console.log(scoreSum);
-            return scoreSum;
-        }
-    },*/
+
+            //Find sum of values by question_id and create new map
+            let map = a.reduce((a, b) =>
+                a.set(b.question_id, (a.get(b.question_id) || 0) + Number(b.value)), new Map);
+
+            //Convert from Map to Object
+            let obj = this.toObject(map);
+
+            //Create an array for each question, calculate the average of value and "reassign" question_id
+            for (let [key, value] of Object.entries(obj)) {
+
+                tempArr[key] = {
+                    "question_id": key,
+                    "value": (Math.round((value / this.replyList.length) * 10) / 10)
+                };
+
+                //Push all arrays to returning value
+                avg.push(tempArr[key]);
+            }
+            console.log(avg);
+            this.averageList = this.toObject(avg);
+        },
+
+        toObject(map) {
+            let obj = Object.create(null);
+
+            for (let [key, value] of map.entries()) {
+                obj[key] = value;
+            }
+            return obj;
+        },
+
+    },
+    computed: {
+        //averageComputed AKA "I should've just set up the database"
+        averageComputed() {
+            const a = [];
+            const avg = [];
+            const tempArr = {};
+
+            //reply_list data in array (question_id and value)
+            for (let i = 0; i < this.replyList.length; i++) {
+                for (let x = 0; x < 4; x++) {
+                    a.push(this.replyList[i].reply_questions[x]);
+                }
+            }
+
+            //Find sum of values by question_id and create new map
+            let map = a.reduce((a, b) =>
+                a.set(b.question_id, (a.get(b.question_id) || 0) + Number(b.value)), new Map);
+
+            console.log(map);
+            //Convert from Map to Object
+            let obj = this.toObject(map);
+            //console.log(obj);
+            //Create an array for each question
+            let i = 0;
+            for (let [key, value] of Object.entries(obj)) {
+                //console.log(Object.entries(obj));
+                //Calculate the average of value
+                //console.log(value, key);
+                tempArr[key] = {
+                    key: key,
+                    value: (Math.round((value / this.replyList.length) * 10) / 10)
+                };
+                //console.log(tempArr[key]);
+                //Push all arrays to returning value
+                avg.push(tempArr[key]);
+                i++;
+            }
+            //console.log(tempArr);
+            //console.log(avg);
+            //console.log("avg");
+            //console.log(this.toObject(avg));
+
+            return this.toObject(avg);
+
+        },
+
+    },
+    beforeCreate() {
+    },
+    beforeMount() {
+
+    },
     mounted() {
-        this.getQuestions();
         this.getReplies();
-    }
+        this.getData();
+        //this.getData();
+        //this.getQuestions();
+        //this.getReplies();
+    },
+
 }
 </script>
 
