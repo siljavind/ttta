@@ -46,7 +46,8 @@
         "supports-preserve-symlinks-flag": "^1.0.0",
         "vite-plugin-full-reload": "^1.0.4",
         "vue": "^3.2.36",
-        "vue-loader": "^17.0.0"
+        "vue-loader": "^17.0.0",
+        "vue-router": "^4.1.5"
     },
     "keywords": [],
     "author": "",

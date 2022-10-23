@@ -22,7 +22,7 @@
 
                         <div class="averageList" v-for="item in averageComputed">
                             <div v-if="item.question_id = question.id">
-                                {{ item.value }}
+                                {{ item.question_id }}
                             </div>
                         </div>
                     </div>
@@ -86,7 +86,6 @@ export default {
             instance.get("/")
                 .then(response => {
                     this.questionList = JSON.parse(JSON.stringify(response.data.data));
-                    //console.log(this.questionList);
                 }).catch(error => {
             });
 
@@ -115,10 +114,23 @@ export default {
 
         },
 
-        averageMethod() {
+        DataToDB() {
+            axios.post('http://localhost:8000/question/', {
+                question_id: 2,
+                name: "fehkfer"
+            })
+                .then(function (response) {
+                console.log(response);
+            })
+                .then(function (error) {
+                console.log(error);
+            })
+        },
+
+        /*averageMethod() {
             const a = [];
             const avg = [];
-            const tempArr = [];
+            const avgArr = [];
             console.log("got called");
             console.log(this.replyList);
             //reply_list data in array (question_id and value)
@@ -139,17 +151,17 @@ export default {
             //Create an array for each question, calculate the average of value and "reassign" question_id
             for (let [key, value] of Object.entries(obj)) {
 
-                tempArr[key] = {
+                avgArr[key] = {
                     "question_id": key,
                     "value": (Math.round((value / this.replyList.length) * 10) / 10)
                 };
 
                 //Push all arrays to returning value
-                avg.push(tempArr[key]);
+                avg.push(avgArr[key]);
             }
             console.log(avg);
             this.averageList = this.toObject(avg);
-        },
+        },*/
 
         toObject(map) {
             let obj = Object.create(null);
@@ -166,7 +178,7 @@ export default {
         averageComputed() {
             const a = [];
             const avg = [];
-            const tempArr = {};
+            const avgArr = {};
 
             //reply_list data in array (question_id and value)
             for (let i = 0; i < this.replyList.length; i++) {
@@ -179,46 +191,41 @@ export default {
             let map = a.reduce((a, b) =>
                 a.set(b.question_id, (a.get(b.question_id) || 0) + Number(b.value)), new Map);
 
-            console.log(map);
             //Convert from Map to Object
             let obj = this.toObject(map);
-            //console.log(obj);
+
             //Create an array for each question
             let i = 0;
             for (let [key, value] of Object.entries(obj)) {
-                //console.log(Object.entries(obj));
+
                 //Calculate the average of value
-                //console.log(value, key);
-                tempArr[key] = {
-                    key: key,
-                    value: (Math.round((value / this.replyList.length) * 10) / 10)
+                avgArr[i] = {
+                    //key: key,
+                    value: (Math.round((value / this.replyList.length) * 10) / 10),
+                    question_id: key
                 };
-                //console.log(tempArr[key]);
                 //Push all arrays to returning value
-                avg.push(tempArr[key]);
+                avg.push(avgArr[i]);
                 i++;
             }
-            //console.log(tempArr);
-            //console.log(avg);
-            //console.log("avg");
-            //console.log(this.toObject(avg));
-
-            return this.toObject(avg);
-
+            //console.log(avgArr);
+            return avgArr;
         },
 
     },
     beforeCreate() {
     },
     beforeMount() {
-
-    },
-    mounted() {
         this.getReplies();
         this.getData();
+    },
+    mounted() {
+        //console.log(this.questionList);
+        this.DataToDB();
         //this.getData();
         //this.getQuestions();
         //this.getReplies();
+
     },
 
 }
