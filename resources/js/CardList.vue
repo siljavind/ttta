@@ -11,23 +11,27 @@
 
         <div class="feedback-container">
             <div class="feedback-list">
-                <h4 style="padding: 0 20px">Question</h4>
+                <div style="display: flex">
+                    <h4 style="display: flex; justify-content: center; font-family: system-ui; font-weight: 500; width:50%">Question</h4>
+                    <h4 style="display: flex; justify-content: center; font-family: system-ui; font-weight: 500; width:25%">Score(s)</h4>
+                    <h4 style="display: flex; justify-content: center; font-family: system-ui; font-weight: 500; width:25%">Comments</h4>
+                </div>
 
                 <div class="feedback">
                     <div class="question" v-for="question in subArray" :key="question.id">
 
-                        <div style="width:65%">{{ question.name }}</div>
+                        <div style="width:50%">{{ question.name }}</div>
                         <div style="width:5%;">
                             <img src="http://business.stagingtalenthub.com/images/svg/rating-outline.svg" alt="">
                         </div>
 
                         <div class="averageList" v-for="item in averageList">
-                            <div>{{ question.question_id }}</div>
-                            <div>{{ item.question_id }}</div>
-                            <div>{{ item.value }}</div>
+                            <div style="font-size: 14px">{{ question.question_id }}</div>
+                            <div style="font-size: 14px">{{ item.question_id }}</div>
+                            <div style="font-size: 14px">{{ item.value }}</div>
                         </div>
 
-                        <div style="width:5%;">
+                        <div style="width:25%; display: flex; justify-content: flex-end">
                             <img src="http://business.stagingtalenthub.com/images/svg/comment.svg" alt="">
                         </div>
                     </div>
@@ -199,20 +203,6 @@ export default {
             }
             return obj;
         },
-        increment() {
-            this.count++;
-            return this.count;
-        }
-
-        /*findDistinct(i) {
-            console.log(this.questionList.question_id[1]);
-            const distinct = (value, index, self) => {
-                return self.indexOf(value) === index;
-            }
-            const distinctValues = i.filter(distinct);
-
-            return distinctValues;
-        }*/
 
     },
     computed: {
@@ -242,8 +232,8 @@ export default {
     flex-direction: column;
 
     background-color: white;
-    //padding: 30px;
     box-shadow: 0 0 15px #0000001F;
+    font-family: system-ui;
 
 
     .cardlist-header {
@@ -256,23 +246,22 @@ export default {
             height: 50px;
             width: 50px;
         }
+    }
+    .cardlist-title {
+        display: flex;
+        flex-direction: column;
+        font-family: system-ui;
 
-        .cardlist-title {
-            display: flex;
-            flex-direction: column;
-            font-family: system-ui;
+        > .title {
+            font-size: 20px;
+            font-weight: 500;
+            letter-spacing: -1px;
+        }
 
-            > .title {
-                font-size: 20px;
-                font-weight: 500;
-                letter-spacing: -1px;
-            }
-
-            > .subtitle {
-                font-size: 16px;
-                font-weight: 300;
-                letter-spacing: -1px;
-            }
+        > .subtitle {
+            font-size: 16px;
+            font-weight: 300;
+            letter-spacing: -1px;
         }
     }
 
@@ -283,46 +272,47 @@ export default {
         justify-content: flex-start;
         height: 100%;
 
-        .feedback-list {
-            display: flex;
-            flex-direction: column;
-            width: 100%;
-            min-width: fit-content;
-
-            .feedback {
-                display: flex;
-                flex-direction: column;
-                flex-wrap: wrap;
-                width: 100%;
-
-                .question {
-                    height: 33%;
-                    min-width: fit-content;
-                    padding: 20px;
-                    border-top: #F7F7F7 solid 2px;
-                    display: flex;
-                    flex-direction: row;
-                    flex-wrap: nowrap;
-                    align-items: center;
-
-                    .averageList {
-                        display: flex;
-                        flex-direction: column;
-                        align-items: center;
-                        gap: 5px;
-                        border: #c7c6c6 1px solid;
-                        margin-left: 5px;
-                        margin-right: 5px;
-                        width: 5%;
-                    }
-
-                }
-            }
-
-        }
     }
 
+    .feedback-list {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        min-width: fit-content;
 
+    }
+
+    .feedback {
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+        width: 100%;
+
+    }
+
+    .question {
+        height: 33%;
+        min-width: fit-content;
+        padding: 20px;
+        border-top: #F7F7F7 solid 2px;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        align-items: center;
+
+    }
+
+    .averageList {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 5px;
+        border: #c7c6c6 1px solid;
+        margin-left: 5px;
+        margin-right: 5px;
+        width: 5%;
+
+    }
 }
 
 </style>
