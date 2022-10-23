@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\QuestionsController;
+use App\Http\Controllers\RepliesController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,8 +18,13 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('app');
 });
+
 Route::group(['prefix' => '/question'], function () {
     Route::get('/list', [QuestionsController::class, 'List']);
-    Route::get('/createQ', [QuestionsController::class, 'CreateQuestions']);
 });
 Route::resource('/question', QuestionsController::class);
+
+Route::group(['prefix' => 'replies'], function () {
+    Route::get('/list', [RepliesController::class, 'List']);
+});
+Route::resource('/replies', RepliesController::class);

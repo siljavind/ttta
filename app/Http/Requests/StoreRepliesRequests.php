@@ -3,7 +3,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreQuestionsRequests extends FormRequest
+class StoreRepliesRequests extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -13,8 +13,8 @@ class StoreQuestionsRequests extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|string',
-            'question_id' => 'required|unique:questions,question_id|integer',
+            'value' => 'required|integer',
+            'question_id' => 'required|integer',
         ];
     }
 }

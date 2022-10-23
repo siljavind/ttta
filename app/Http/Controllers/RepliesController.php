@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreQuestionsRequests;
-use App\Models\Questions;
+use App\Http\Requests\StoreRepliesRequests;
+use App\Models\Replies;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
-class QuestionsController extends Controller
+class RepliesController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -35,14 +35,13 @@ class QuestionsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreQuestionsRequests $request): Response
+    public function store(StoreRepliesRequests $request) : Response
     {
-        $questions = Questions::create($request->validated());
+        $replies = Replies::create($request->validated());
 
         return response([
-            "data" => $questions
-        ], 404
-        );
+            "data" => $replies
+        ], 200);
     }
 
     /**
@@ -53,7 +52,7 @@ class QuestionsController extends Controller
      */
     public function show($id)
     {
-
+        //
     }
 
     /**
@@ -92,10 +91,10 @@ class QuestionsController extends Controller
 
     public function List(Request $request)
     {
-        $questions = Questions::all();
+        $replies = Replies::all();
 
         return response([
-            "data" => $questions
+            "data" => $replies
         ], 200);
     }
 }

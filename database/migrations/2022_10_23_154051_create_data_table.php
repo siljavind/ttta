@@ -14,8 +14,15 @@ return new class extends Migration {
     {
         Schema::create('questions', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('question_id');
             $table->string('name');
+            $table->unsignedBigInteger('question_id');
+            $table->timestamps();
+        });
+
+        Schema::create('replies', function (Blueprint $table) {
+            $table->id();
+            $table->string('value');
+            $table->unsignedBigInteger('question_id');
             $table->timestamps();
         });
     }

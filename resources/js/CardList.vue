@@ -14,33 +14,36 @@
                 <h4 style="padding: 0 20px">Question</h4>
 
                 <div class="feedback">
-                    <!--{{ averageComputed }}-->
-                    <div class="question" v-for="question in questionList.questions" :key="question.id">
+                    <div class="question" v-for="question in subArray" :key="question.id">
 
-                        <div>{{ question.name }}</div>
+                        <div style="width:65%">{{ question.name }}</div>
+                        <div style="width:5%;">
+                            <img src="http://business.stagingtalenthub.com/images/svg/rating-outline.svg" alt="">
+                        </div>
 
+                        <div class="averageList" v-for="item in averageList">
+                            <div>{{ question.question_id }}</div>
+                            <div>{{ item.question_id }}</div>
+                            <div>{{ item.value }}</div>
+                        </div>
 
-                        <div class="averageList" v-for="item in averageComputed">
-                            <div v-if="item.question_id = question.id">
-                                {{ item.question_id }}
-                            </div>
+                        <div style="width:5%;">
+                            <img src="http://business.stagingtalenthub.com/images/svg/comment.svg" alt="">
                         </div>
                     </div>
 
-
-                    <div class="score" style="width: 50px; height: 20px; background-color: #1a202c">
-
-                    </div>
+                    <div v-if="questionList.question_id = averageList.question_id"> HHHHH</div>
 
                 </div>
 
             </div>
 
-
-            <!--<div style="width:20%">Score</div>
-            <div style="width:20%">Comments</div>-->
-
         </div>
+
+
+        <!--<div style="width:20%">Score</div>
+        <div style="width:20%">Comments</div>-->
+
 
         <!--
             <div style="display: flex; gap: 10px; flex-direction: column; flex-wrap: wrap">
@@ -70,13 +73,16 @@ export default {
     ],
     data: function () {
         return {
-            questionList: {},
+            questionList: [],
             replyList: [],
-            //averageList: [],
+            averageList: [],
+            count: 0
         }
     },
     methods: {
         getData() {
+            //Shouldn't be in this file
+
             const instance = axios.create();
 
             instance.defaults.baseURL = "https://business.stagingtalenthub.com/api/measurements/ab8b76b28aeb494992c47466fea7e49e"
@@ -85,61 +91,84 @@ export default {
 
             instance.get("/")
                 .then(response => {
-                    this.questionList = JSON.parse(JSON.stringify(response.data.data));
+                    this.QuestionsToDB(response.data.data);
                 }).catch(error => {
+                //console.log(error);
             });
-
-            /*instance.get("/replies/bulk", {})
-                .then(response => {
-                    this.replyList = response.data.data;
-                }).catch(error => {
-            })*/
-
-        },
-
-        getReplies() {
-            const instance = axios.create();
-
-            instance.defaults.baseURL = "https://business.stagingtalenthub.com/api/measurements/ab8b76b28aeb494992c47466fea7e49e";
-            instance.defaults.headers.common["Authorization"] = import.meta.env.VITE_TALENTHUB_TOKEN; //IS EXPOSED TO USER
 
             instance.get("/replies/bulk", {})
                 .then(response => {
-                    this.replyList = response.data.data;
-                    //console.log(this.replyList);
+                    this.RepliesToDB(response.data.data);
                 }).catch(error => {
-                console.log("reply failed");
-            });
-
+                //console.log(error);
+            })
 
         },
 
-        DataToDB() {
-            axios.post('http://localhost:8000/question/', {
-                question_id: 2,
-                name: "fehkfer"
-            })
-                .then(function (response) {
-                console.log(response);
-            })
-                .then(function (error) {
-                console.log(error);
-            })
+        QuestionsToDB(list) {
+            //Shouldn't be in this file
+
+            for (let i = 0; i < list.questions.length; i++) {
+
+                axios.post('http://localhost:8000/question', {
+                    question_id: list.questions[i].id,
+                    name: list.questions[i].name
+                })
+                    .then(function (response) {
+                        //console.log(response);
+                    })
+                    .then(function (error) {
+                        // console.log(error);
+                    })
+            }
         },
 
-        /*averageMethod() {
-            const a = [];
+        getQuestions() {
+            axios.get('http://localhost:8000/question/list', {})
+                .then(response => {
+                    this.questionList = response.data.data;
+                }).catch(error => {
+                //console.log(error);
+            })
+        },
+        RepliesToDB(list) {
+            //Shouldn't be in this file
+
+            for (let i = 0; i < list.length; i++) {
+                for (let x = 0; x < list[x].reply_questions.length; x++) {
+
+                    axios.post('http://localhost:8000/replies', {
+                        question_id: list[i].reply_questions[x].question_id,
+                        value: list[i].reply_questions[x].value
+                    })
+                        .then(function (response) {
+                            //console.log(response);
+                        })
+                        .then(function (error) {
+                            // console.log(error);
+                        })
+                }
+
+            }
+        },
+
+        getReplies() {
+            axios.get('http://localhost:8000/replies/list', {})
+                .then(response => {
+                    this.replyList = response.data;
+                    // console.log("getReply");
+                    // console.log(this.replyList);
+                    this.averageMethod(this.replyList);
+                }).catch(error => {
+                //console.log(error);
+            })
+
+        },
+
+        averageMethod(list) {
+            const a = list.data;
             const avg = [];
             const avgArr = [];
-            console.log("got called");
-            console.log(this.replyList);
-            //reply_list data in array (question_id and value)
-            for (let i = 0; i < this.replyList.length; i++) {
-                for (let x = 0; x < 4; x++) {
-                    a.push(this.replyList[i].reply_questions[x]);
-                    console.log("replies exist");
-                }
-            }
 
             //Find sum of values by question_id and create new map
             let map = a.reduce((a, b) =>
@@ -150,18 +179,17 @@ export default {
 
             //Create an array for each question, calculate the average of value and "reassign" question_id
             for (let [key, value] of Object.entries(obj)) {
-
                 avgArr[key] = {
                     "question_id": key,
-                    "value": (Math.round((value / this.replyList.length) * 10) / 10)
+                    "value": (Math.round((value / (list.data.length / 4)) * 10) / 10)
                 };
 
-                //Push all arrays to returning value
+                //Push all arrays to array
                 avg.push(avgArr[key]);
             }
-            console.log(avg);
             this.averageList = this.toObject(avg);
-        },*/
+            console.log(this.averageList);
+        },
 
         toObject(map) {
             let obj = Object.create(null);
@@ -171,61 +199,35 @@ export default {
             }
             return obj;
         },
+        increment() {
+            this.count++;
+            return this.count;
+        }
+
+        /*findDistinct(i) {
+            console.log(this.questionList.question_id[1]);
+            const distinct = (value, index, self) => {
+                return self.indexOf(value) === index;
+            }
+            const distinctValues = i.filter(distinct);
+
+            return distinctValues;
+        }*/
 
     },
     computed: {
-        //averageComputed AKA "I should've just set up the database"
-        averageComputed() {
-            const a = [];
-            const avg = [];
-            const avgArr = {};
-
-            //reply_list data in array (question_id and value)
-            for (let i = 0; i < this.replyList.length; i++) {
-                for (let x = 0; x < 4; x++) {
-                    a.push(this.replyList[i].reply_questions[x]);
-                }
-            }
-
-            //Find sum of values by question_id and create new map
-            let map = a.reduce((a, b) =>
-                a.set(b.question_id, (a.get(b.question_id) || 0) + Number(b.value)), new Map);
-
-            //Convert from Map to Object
-            let obj = this.toObject(map);
-
-            //Create an array for each question
-            let i = 0;
-            for (let [key, value] of Object.entries(obj)) {
-
-                //Calculate the average of value
-                avgArr[i] = {
-                    //key: key,
-                    value: (Math.round((value / this.replyList.length) * 10) / 10),
-                    question_id: key
-                };
-                //Push all arrays to returning value
-                avg.push(avgArr[i]);
-                i++;
-            }
-            //console.log(avgArr);
-            return avgArr;
-        },
-
-    },
-    beforeCreate() {
+        subArray() {
+            return this.questionList.slice(0, 3)
+        }
     },
     beforeMount() {
-        this.getReplies();
-        this.getData();
+        //this.getData();
+
     },
     mounted() {
-        //console.log(this.questionList);
-        this.DataToDB();
-        //this.getData();
-        //this.getQuestions();
-        //this.getReplies();
-
+        this.getQuestions();
+        this.getReplies();
+        this.averageMethod();
     },
 
 }
@@ -291,17 +293,28 @@ export default {
                 display: flex;
                 flex-direction: column;
                 flex-wrap: wrap;
-                width: 55%;
+                width: 100%;
 
                 .question {
-                    height: 25%;
+                    height: 33%;
                     min-width: fit-content;
                     padding: 20px;
                     border-top: #F7F7F7 solid 2px;
                     display: flex;
                     flex-direction: row;
                     flex-wrap: nowrap;
-                    justify-content: space-between;
+                    align-items: center;
+
+                    .averageList {
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        gap: 5px;
+                        border: #c7c6c6 1px solid;
+                        margin-left: 5px;
+                        margin-right: 5px;
+                        width: 5%;
+                    }
 
                 }
             }

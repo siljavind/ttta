@@ -5,13 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Questions extends Model
+class Replies extends Model
 {
     use HasFactory;
-
-    protected $table = 'questions';
+    protected $table = 'replies';
     protected $fillable = [
-        'name',
+        'value',
         'question_id',
     ];
 
@@ -19,5 +18,4 @@ class Questions extends Model
     {
         parent::boot();
     }
-
 }
