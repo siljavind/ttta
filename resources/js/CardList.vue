@@ -73,7 +73,7 @@ export default {
             const instance = axios.create();
 
             instance.defaults.baseURL = "https://business.stagingtalenthub.com/api/measurements/ab8b76b28aeb494992c47466fea7e49e"
-            instance.defaults.headers.common["Authorization"] = import.meta.env.VITE_TALENTHUB_TOKEN; //IS EXPOSED TO USER
+            instance.defaults.headers.common["Authorization"] = ""; /*TOKEN****************************/
             //instance.defaults.responseType = 'json';
 
             instance.get("/")

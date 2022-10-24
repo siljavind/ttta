@@ -21,8 +21,6 @@
 
 @vite('resources/js/app.js')
 <input type="hidden" id="csrf_token" value="{{csrf_token()}}">
-</body>
-</html>
 
 <style>
     body {
@@ -58,3 +56,7 @@
     }
 
 </style>
+</body>
+</html>
+
+
