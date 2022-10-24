@@ -31,12 +31,10 @@
                             <div style="font-size: 14px">{{ item.value }}</div>
                         </div>
 
-                        <div style="width:25%; display: flex; justify-content: flex-end">
+                        <div style="width:25%; display: flex; justify-content: center">
                             <img src="http://business.stagingtalenthub.com/images/svg/comment.svg" alt="">
                         </div>
                     </div>
-
-                    <div v-if="questionList.question_id = averageList.question_id"> HHHHH</div>
 
                 </div>
 
