@@ -5,8 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Talenthub Technical Test Assignment</title>
-
-    <!--<link href="{{asset('css/app.css')}}" rel="stylesheet"/>-->
 </head>
 
 <body>
@@ -58,6 +56,5 @@
         height: calc(60vh - 90px);
         min-height: max-content;
     }
-
 
 </style>

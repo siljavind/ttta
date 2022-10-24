@@ -110,14 +110,6 @@ export default {
             }
         },
 
-        getQuestions() {
-            axios.get('http://localhost:8000/question/list', {})
-                .then(response => {
-                    this.questionList = response.data.data;
-                }).catch(error => {
-                //console.log(error);
-            })
-        },
         RepliesToDB(list) {
             //Shouldn't be in this file
 
@@ -137,6 +129,14 @@ export default {
                 }
 
             }
+        },
+        getQuestions() {
+            axios.get('http://localhost:8000/question/list', {})
+                .then(response => {
+                    this.questionList = response.data.data;
+                }).catch(error => {
+                //console.log(error);
+            })
         },
 
         getReplies() {
@@ -175,7 +175,6 @@ export default {
                 avg.push(avgArr[key]);
             }
             this.averageList = this.toObject(avg);
-            console.log(this.averageList);
         },
 
         toObject(map) {
