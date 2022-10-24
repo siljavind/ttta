@@ -11,10 +11,16 @@
 
         <div class="feedback-container">
             <div class="feedback-list">
-                <div style="display: flex">
-                    <h4 style="display: flex; justify-content: center; font-family: system-ui; font-weight: 500; width:50%">Question</h4>
-                    <h4 style="display: flex; justify-content: center; font-family: system-ui; font-weight: 500; width:25%">Score(s)</h4>
-                    <h4 style="display: flex; justify-content: center; font-family: system-ui; font-weight: 500; width:25%">Comments</h4>
+                <div class="feedback-titles">
+                    <div style="width:50%">
+                        Question
+                    </div>
+                    <div style="width:25%">
+                        Score(s)
+                    </div>
+                    <div style="width:25%">
+                        Comments
+                    </div>
                 </div>
 
                 <div class="feedback">
@@ -224,18 +230,19 @@ export default {
             width: 50px;
         }
     }
+
     .cardlist-title {
         display: flex;
         flex-direction: column;
         font-family: system-ui;
 
-        > .title {
+        .title {
             font-size: 20px;
             font-weight: 500;
             letter-spacing: -1px;
         }
 
-        > .subtitle {
+        .subtitle {
             font-size: 16px;
             font-weight: 300;
             letter-spacing: -1px;
@@ -257,6 +264,19 @@ export default {
         width: 100%;
         min-width: fit-content;
 
+    }
+
+    .feedback-titles {
+        display: flex;
+        padding-top: 30px;
+        padding-bottom: 5px;
+
+        > div  {
+            display: flex;
+            justify-content: center;
+            font-family: system-ui;
+            font-weight: 500;
+        }
     }
 
     .feedback {
