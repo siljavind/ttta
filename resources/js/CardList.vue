@@ -35,30 +35,9 @@
                             <img src="http://business.stagingtalenthub.com/images/svg/comment.svg" alt="">
                         </div>
                     </div>
-
                 </div>
-
             </div>
-
         </div>
-
-
-        <!--<div style="width:20%">Score</div>
-        <div style="width:20%">Comments</div>-->
-
-
-        <!--
-            <div style="display: flex; gap: 10px; flex-direction: column; flex-wrap: wrap">
-                <div v-for="reply in replyList" :key="reply.id"
-                     style="height: fit-content; width: fit-content; background-color: lightblue">
-                    <div v-for="(childItem, key) in reply">
-                        <div>
-                            {{ childItem }}
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>-->
     </div>
 
 </template>
