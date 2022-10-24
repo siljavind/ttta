@@ -32,9 +32,9 @@
                         </div>
 
                         <div class="averageList" v-for="item in averageList">
-                            <div style="font-size: 14px">{{ question.question_id }}</div>
-                            <div style="font-size: 14px">{{ item.question_id }}</div>
-                            <div style="font-size: 14px">{{ item.value }}</div>
+                            <div>{{ question.question_id }}</div>
+                            <div>{{ item.question_id }}</div>
+                            <div>{{ item.value }}</div>
                         </div>
 
                         <div style="width:25%; display: flex; justify-content: center">
@@ -270,7 +270,7 @@ export default {
         padding-top: 30px;
         padding-bottom: 5px;
 
-        > div  {
+        > div {
             display: flex;
             justify-content: center;
             font-family: system-ui;
@@ -307,6 +307,10 @@ export default {
         margin-left: 5px;
         margin-right: 5px;
         width: 5%;
+
+        > div {
+            font-size: 14px
+        }
 
     }
 }
