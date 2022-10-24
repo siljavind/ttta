@@ -127,7 +127,6 @@ export default {
                             // console.log(error);
                         })
                 }
-
             }
         },
         getQuestions() {
@@ -143,8 +142,6 @@ export default {
             axios.get('http://localhost:8000/replies/list', {})
                 .then(response => {
                     this.replyList = response.data;
-                    // console.log("getReply");
-                    // console.log(this.replyList);
                     this.averageMethod(this.replyList);
                 }).catch(error => {
                 //console.log(error);
